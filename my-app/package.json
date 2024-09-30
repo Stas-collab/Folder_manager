@@ -1,5 +1,5 @@
 {
-  "name": "project_c2",
+  "name": "folder-manager",
   "version": "1.0.0",
   "description": "My awesome project",
   "main": "index.js",
@@ -13,7 +13,7 @@
     "React",
     "eslint"
   ],
-  "author": "romanbuchuk",
+  "author": "Stas",
   "license": "ISC",
   "dependencies": {
     "react": "18.3.1",

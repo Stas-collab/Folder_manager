@@ -1,14 +1,16 @@
-import React from 'react';
+import React from "react";
 // import resizeHook from '@hooks/resize';
 
-import * as styles from './App.css';
+import * as styles from "./App.css";
 
 const App = () => {
   return (
-    <div className={styles.main}>My first application</div>
-  )
+    <div className={styles.container}>
+      <section className={styles.profil}></section>
+      <section className={styles.activites}></section>
+    </div>
+  );
 };
 
 // export { App };
 export default App;
-
