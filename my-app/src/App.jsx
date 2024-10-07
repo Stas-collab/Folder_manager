@@ -1,15 +1,15 @@
-import React from "react";
-// import resizeHook from '@hooks/resize';
+import React from 'react';
 
-import * as styles from "./App.css";
+// import resizeHook from '@hooks/resize';
+import styles from './App.css';
+// import * as styles from './App.css';
 
 const App = () => {
-  return (
-    <div className={styles.container}>
-      <section className={styles.profil}></section>
-      <section className={styles.activites}></section>
-    </div>
-  );
+    return (
+        <div className={styles.main} data-testid="app">
+            My first application
+        </div>
+    );
 };
 
 // export { App };
