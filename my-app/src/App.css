@@ -1,3 +1,87 @@
 .main {
     background-color: red;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('./image/image.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.register {
+    width: 420px;
+    background-color: rgba(255, 255, 255, 0.1); /* Прозорий фон */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    color: #fff;
+    padding: 30px;
+}
+
+.register h1 {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mb3 {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.mb3 input {
+    width: 100%;
+    height: 50px;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 48px;
+    padding: 20px 20px 20px 45px;
+    font-size: 16px;
+    color: #fff;
+}
+
+.mb3 input::placeholder {
+    color: #fff;
+}
+
+.mb3 i {
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    font-size: 20px;
+    color: #fff;
+}
+
+.btn {
+    width: 100%;
+    height: 45px;
+    background-color: #fff;
+    color: black;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.link {
+    text-decoration: none;
+    color: #fff;
+    margin-left: 30px;
+    cursor: pointer;
+}

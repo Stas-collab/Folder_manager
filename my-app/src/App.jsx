@@ -1,4 +1,6 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './pages/home';
 
 // import resizeHook from '@hooks/resize';
 import styles from './App.css';
@@ -6,9 +8,11 @@ import styles from './App.css';
 
 const App = () => {
     return (
-        <div className={styles.main} data-testid="app">
-            My first application
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route index path="/" element={<Home />} />
+            </Routes>
+        </BrowserRouter>
     );
 };
 
