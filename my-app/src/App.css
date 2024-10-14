@@ -11,7 +11,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body {
+.background {
     display: flex;
     justify-content: center;
     align-items: center;
