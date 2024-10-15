@@ -24,7 +24,10 @@ const Private = () => {
                         <div className={`${styles.icon} ${styles.dashboard}`}></div>
                         <div className={styles.icon}>
                             <span className="material-symbols-outlined">home</span>
-                            <Link to={'/private'}> Home</Link>
+                            <Link to={'/private'} className={styles.links}>
+                                {' '}
+                                Home
+                            </Link>
                         </div>
                         <div className={`${styles.icon} ${styles.special}`}>
                             <div className={styles.icon}>
@@ -43,7 +46,7 @@ const Private = () => {
                         </ul>
                         <div className={styles.icon}>
                             <span className="material-symbols-outlined">settings</span>
-                            <Link to={'/settings'} className={styles.setting}>
+                            <Link to={'/settings'} className={styles.links}>
                                 Setting
                             </Link>
                         </div>
@@ -98,7 +101,10 @@ const Private = () => {
                     </div>
 
                     <div className={styles.underManage}>
-                        <p>Create folders to sort files and have quick access to documents</p>
+                        <p>
+                            Create folders to sort files and have
+                            <br /> quick access to documents
+                        </p>
                     </div>
                 </section>
             </article>
