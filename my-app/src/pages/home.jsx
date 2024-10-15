@@ -67,7 +67,7 @@ const Home = ({ user }) => {
     return (
         <div className={styles.background}>
             <div className={styles.register}>
-                {isSingUpActive ? <h1>Register</h1> : <h1>Login</h1>}
+                {isSingUpActive ? <h1 data-testid="cypress-titel">Register</h1> : <h1>Login</h1>}
                 <form onSubmit={handleSingUp}>
                     <div className={styles.mb3}>
                         <input
