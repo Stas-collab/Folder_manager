@@ -2,12 +2,16 @@ import { signOut } from 'firebase/auth';
 import React from 'react';
 import { auth } from '../firebase';
 import styles from './App.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Private = () => {
+const Settings = () => {
+    const navigate = useNavigate();
     const handleSignOut = () => {
         signOut(auth)
-            .then(() => console.log('SignOut'))
+            .then(() => {
+                console.log('SignOut');
+                navigate('/'); // Перенаправляємо на домашню сторінку
+            })
             .catch((error) => console.log(error));
     };
     return (
@@ -76,42 +80,10 @@ const Private = () => {
                             </div>
                         </div>
                     </div>
-
-                    <div className={styles.manageFolders}>
-                        <h1 className={styles.manageFoldersText}>Manage your folders</h1>
-                        <div className={styles.userFolders}>
-                            <div className={styles.newFolder}>
-                                <button className={styles.crossButton}>&#x2715;</button>
-                            </div>
-                            <div className={`${styles.marketing} ${styles.mainDecorationFolders}`}>
-                                <div className={styles.number}>
-                                    <p className={`${styles.textNumber} ${styles.text}`}>01</p>
-                                    <p className={styles.text}>:</p>
-                                </div>
-                                <div className={styles.marketingFooter}>
-                                    <p className={styles.colorText}>Marketing</p>
-                                    <p className={styles.marketingGb}>124 GB</p>
-                                </div>
-                            </div>
-                            <div className={`${styles.branding} ${styles.mainDecorationFolders}`}>
-                                <div className={styles.number}>
-                                    <p className={`${styles.textNumber} ${styles.text}`}>02</p>
-                                    <p className={styles.text}>:</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.underManage}>
-                        <p>
-                            Create folders to sort files and have
-                            <br /> quick access to documents
-                        </p>
-                    </div>
                 </section>
             </article>
         </div>
     );
 };
 
-export default Private;
+export default Settings;

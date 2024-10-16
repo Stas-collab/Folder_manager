@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Private from './pages/private';
 import Home from './pages/home';
+import Settings from './pages/settings';
 
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -45,6 +46,7 @@ const App = () => {
                             </ProtectedRout>
                         }
                     />
+                    <Route path="/settings" element={<Settings />} />
                 </Routes>
             )}
         </BrowserRouter>
