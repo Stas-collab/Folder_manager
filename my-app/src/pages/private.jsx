@@ -1,10 +1,27 @@
 import { signOut } from 'firebase/auth';
-import React from 'react';
-import { auth } from '../firebase';
+import React, { useState, useEffect } from 'react';
+import { auth, db } from '../firebase';
 import styles from './App.module.css';
 import { Link } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import DefaultImage from '../image/default.jpg';
 
 const Private = () => {
+    const [avatarUrl, setAvatarUrl] = useState(DefaultImage); // Стан для URL аватарки
+
+    useEffect(() => {
+        // Функція для завантаження аватарки
+        const fetchAvatarUrl = async () => {
+            const userDocRef = doc(db, 'users', auth.currentUser.uid); // Отримуємо документ користувача з Firestore
+            const userDoc = await getDoc(userDocRef); // Викликаємо getDoc
+
+            if (userDoc.exists()) {
+                setAvatarUrl(userDoc.data().avatarUrl); // Встановлюємо URL аватарки з Firestore
+            }
+        };
+
+        fetchAvatarUrl(); // Викликаємо функцію
+    }, []);
     const handleSignOut = () => {
         signOut(auth)
             .then(() => console.log('SignOut'))
@@ -17,8 +34,7 @@ const Private = () => {
                     <h1 className={styles.logoName}>Folders manager</h1>
                     <div className={styles.imgProfil}>
                         <nav>
-                            <div className={styles.img}></div>
-                            <i className="fas fa-heartbeat"></i>
+                            <img src={avatarUrl} alt="" className={styles.profilImg} />
                         </nav>
                         <p className={styles.userName}>Frog</p>
                         <div className={`${styles.icon} ${styles.dashboard}`}></div>
@@ -47,7 +63,9 @@ const Private = () => {
                             <li>WorkPlace</li>
                         </ul>
                         <div className={styles.icon}>
-                            <span className="material-symbols-outlined">settings</span>
+                            <Link to={'/settings'} className={styles.links}>
+                                <span className="material-symbols-outlined">settings</span>
+                            </Link>
                             <Link to={'/settings'} className={styles.links}>
                                 Setting
                             </Link>

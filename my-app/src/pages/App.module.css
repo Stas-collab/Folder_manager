@@ -100,13 +100,11 @@ h1 {
     background-color: rgba(255, 255, 255, 0.33);
 }
 
-.img {
-    border: none;
-    background-color: rgba(39, 219, 39, 0.384);
-    padding: 40px;
-    width: 3px;
+.profilImg {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
     margin-left: 40px;
-    border-radius: 50px;
 }
 
 nav {
@@ -347,4 +345,62 @@ li:last-child {
     text-decoration: none;
     color: #fff;
     font-size: 20px;
+}
+
+.avatar {
+    width: 300px;
+    height: 300px;
+    border-radius: 100%;
+}
+.settingsPage {
+    display: flex;
+    gap: 300px;
+}
+
+.inputsSetting {
+    margin-left: 40px;
+    position: relative;
+}
+
+.userNameInput {
+    height: 37px;
+    width: 200px;
+    border: 2px solid black;
+    outline: none;
+    border-radius: 24px;
+    padding: 10px;
+}
+.userNameSumbit {
+    position: absolute;
+    left: 130px;
+    top: 50px;
+    color: #fff;
+    cursor: pointer;
+    padding: 2px 15px;
+    background-color: #087f5b;
+    border: none;
+    border-radius: 24px;
+}
+.userNameSumbit:hover {
+    background-color: #099268;
+}
+
+.btnEdit {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    position: absolute;
+    right: 60px;
+    bottom: 25px;
+}
+
+.userEditIcon {
+    position: relative;
+}
+
+.editIcon {
+    filter: grayscale(100%) brightness(0%);
+    width: 35px;
+    height: 35px;
 }

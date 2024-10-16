@@ -26,6 +26,10 @@ const basicConfig = {
                     },
                 ],
             },
+            {
+                test: /\.(png|jpg|jpeg|gif|svg)$/i,
+                type: 'asset/resource', // Використовує Webpack 5 для обробки зображень
+            },
         ],
     },
     resolve: {
