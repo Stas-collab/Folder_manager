@@ -3,6 +3,10 @@
     padding: 0;
 }
 
+header {
+    position: fixed;
+}
+
 .container {
     width: 100%;
     margin: auto;
@@ -116,7 +120,7 @@ nav {
 }
 
 .userName {
-    margin-left: 40px;
+    margin-left: 62px;
     margin-bottom: 24px;
     margin-top: 24px;
     white-space: nowrap;
@@ -403,4 +407,12 @@ li:last-child {
     filter: grayscale(100%) brightness(0%);
     width: 35px;
     height: 35px;
+}
+
+.ringWindow {
+    position: absolute;
+    bottom: 50px;
+    left: 450px;
+    padding: 19rem;
+    background-color: #fff;
 }

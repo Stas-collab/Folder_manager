@@ -1,6 +1,6 @@
 import { signOut } from 'firebase/auth';
 import React, { useState, useEffect } from 'react';
-import { auth, db } from '../firebase';
+import { auth, db, storage } from '../firebase';
 import styles from './App.module.css';
 import { Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
@@ -22,6 +22,7 @@ const Private = () => {
 
         fetchAvatarUrl(); // Викликаємо функцію
     }, []);
+
     const handleSignOut = () => {
         signOut(auth)
             .then(() => console.log('SignOut'))
@@ -42,7 +43,7 @@ const Private = () => {
                             <Link to={'/private'} className={styles.links}>
                                 <span className="material-symbols-outlined">home</span>
                             </Link>
-                            <Link to={'/private'} className={styles.links}>
+                            <Link to={'/private'} className={`${styles.links} ${styles.home}`}>
                                 {' '}
                                 Home
                             </Link>
@@ -67,7 +68,7 @@ const Private = () => {
                                 <span className="material-symbols-outlined">settings</span>
                             </Link>
                             <Link to={'/settings'} className={styles.links}>
-                                Setting
+                                Settings
                             </Link>
                         </div>
                     </div>
@@ -80,14 +81,13 @@ const Private = () => {
                             <p className={styles.overviewGb}>185 GB</p>
                         </div>
                         <div className={styles.rightPanel}>
-                            <div className={styles.searchBtn}>
-                                <span className="material-symbols-outlined">search</span>
-                                <input className={styles.searchText} type="text" placeholder="search..." />
-                            </div>
                             <div className={styles.userBtn}>
                                 <button className={styles.ring}>
                                     <span className="material-symbols-outlined">notifications</span>
                                 </button>
+                                <div className={styles.ringWindow} hidden>
+                                    <button className={styles.closeWindow}>&times;</button>
+                                </div>
                                 <button onClick={handleSignOut} className={styles.logout}>
                                     <span className="material-symbols-outlined">logout</span>
                                 </button>
@@ -100,22 +100,6 @@ const Private = () => {
                         <div className={styles.userFolders}>
                             <div className={styles.newFolder}>
                                 <button className={styles.crossButton}>&#x2715;</button>
-                            </div>
-                            <div className={`${styles.marketing} ${styles.mainDecorationFolders}`}>
-                                <div className={styles.number}>
-                                    <p className={`${styles.textNumber} ${styles.text}`}>01</p>
-                                    <p className={styles.text}>:</p>
-                                </div>
-                                <div className={styles.marketingFooter}>
-                                    <p className={styles.colorText}>Marketing</p>
-                                    <p className={styles.marketingGb}>124 GB</p>
-                                </div>
-                            </div>
-                            <div className={`${styles.branding} ${styles.mainDecorationFolders}`}>
-                                <div className={styles.number}>
-                                    <p className={`${styles.textNumber} ${styles.text}`}>02</p>
-                                    <p className={styles.text}>:</p>
-                                </div>
                             </div>
                         </div>
                     </div>

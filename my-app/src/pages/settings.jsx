@@ -117,7 +117,7 @@ const Settings = () => {
                     </div>
                     <div className={styles.settingsPage}>
                         <div className={styles.inputsSetting}>
-                            <input type="text" className={styles.userNameInput} />
+                            <input type="text" className={styles.userNameInput} placeholder="Name" />
                             <input type="submit" value="Save" className={styles.userNameSumbit} />
                         </div>
                         <div className={styles.userEditIcon}>
