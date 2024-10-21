@@ -38,7 +38,7 @@ const App = () => {
             ) : (
                 <Routes>
                     <Route index path="/" element={<Home user={user} />} />
-
+                    
                     <Route
                         path="/private"
                         element={

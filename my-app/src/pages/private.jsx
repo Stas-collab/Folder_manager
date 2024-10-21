@@ -110,6 +110,21 @@ const Private = () => {
                             <br /> quick access to documents
                         </p>
                     </div>
+                    <div className={styles.createBtnWindow} hidden>
+                        <h1 className={styles.headText}>Створення папки</h1>
+                        <div className={styles.createBtnForm}>
+                            <input
+                                type="text"
+                                name=""
+                                id=""
+                                className={styles.inputNameFolder}
+                                placeholder="Folder name"
+                            />
+                            <p>Виберіть колір</p>
+                            <input type="color" name="" id="" className={styles.inputColorFolder} />
+                            <input type="submit" value="Створити папку" className={styles.inputCreateFolder} />
+                        </div>
+                    </div>
                 </section>
             </article>
         </div>
