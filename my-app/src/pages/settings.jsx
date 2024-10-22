@@ -1,25 +1,26 @@
 import { signOut } from 'firebase/auth';
-import React, { useState, useRef, useEffect } from 'react';
+import { doc, getDoc,setDoc } from 'firebase/firestore';
+import { getDownloadURL,ref, uploadBytes } from 'firebase/storage';
+import React, { useEffect,useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { auth, db as database,storage } from '../firebase';
 import DefaultImage from '../image/default.jpg';
 import EditIcon from '../image/edit.svg';
-import { auth, storage, db } from '../firebase';
 import styles from './App.module.css';
-import { Link, useNavigate } from 'react-router-dom';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 const Settings = () => {
-    const fileUploadeRef = useRef();
+    const fileUploadeReference = useRef();
     const [avatarUrl, setAvatarUrl] = useState(DefaultImage);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAvatarUrl = async () => {
-            const userDocRef = doc(db, 'users', auth.currentUser.uid);
-            const userDoc = await getDoc(userDocRef);
+            const userDocumentReference = doc(database, 'users', auth.currentUser.uid);
+            const userDocument = await getDoc(userDocumentReference);
 
-            if (userDoc.exists()) {
-                setAvatarUrl(userDoc.data().avatarUrl); // Встановлюємо URL аватарки з Firestore
+            if (userDocument.exists()) {
+                setAvatarUrl(userDocument.data().avatarUrl); // Встановлюємо URL аватарки з Firestore
             }
         };
 
@@ -28,20 +29,20 @@ const Settings = () => {
 
     const handleImageUplode = (event) => {
         event.preventDefault();
-        fileUploadeRef.current.click();
+        fileUploadeReference.current.click();
     };
 
     const uploadImageDisplay = async () => {
-        const uploudFile = fileUploadeRef.current.files[0];
+        const uploudFile = fileUploadeReference.current.files[0];
 
         if (uploudFile) {
-            const storageRef = ref(storage, `avatars/${auth.currentUser.uid}/${uploudFile.name}`);
-            await uploadBytes(storageRef, uploudFile);
-            const url = await getDownloadURL(storageRef);
+            const storageReference = ref(storage, `avatars/${auth.currentUser.uid}/${uploudFile.name}`);
+            await uploadBytes(storageReference, uploudFile);
+            const url = await getDownloadURL(storageReference);
             setAvatarUrl(url);
 
-            const userDocRef = doc(db, 'users', auth.currentUser.uid);
-            await setDoc(userDocRef, { avatarUrl: url }, { merge: true });
+            const userDocumentReference = doc(database, 'users', auth.currentUser.uid);
+            await setDoc(userDocumentReference, { avatarUrl: url }, { merge: true });
         }
     };
 
@@ -129,7 +130,7 @@ const Settings = () => {
 
                                 <input
                                     type="file"
-                                    ref={fileUploadeRef}
+                                    ref={fileUploadeReference}
                                     onChange={uploadImageDisplay}
                                     id="file"
                                     hidden

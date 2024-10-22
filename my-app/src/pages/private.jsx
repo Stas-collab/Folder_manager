@@ -1,10 +1,11 @@
 import { signOut } from 'firebase/auth';
-import React, { useState, useEffect } from 'react';
-import { auth, db, storage } from '../firebase';
-import styles from './App.module.css';
-import { Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect,useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { auth, db as database, storage } from '../firebase';
 import DefaultImage from '../image/default.jpg';
+import styles from './App.module.css';
 
 const Private = () => {
     const [avatarUrl, setAvatarUrl] = useState(DefaultImage); // Стан для URL аватарки
@@ -12,11 +13,11 @@ const Private = () => {
     useEffect(() => {
         // Функція для завантаження аватарки
         const fetchAvatarUrl = async () => {
-            const userDocRef = doc(db, 'users', auth.currentUser.uid); // Отримуємо документ користувача з Firestore
-            const userDoc = await getDoc(userDocRef); // Викликаємо getDoc
+            const userDocumentReference = doc(database, 'users', auth.currentUser.uid); // Отримуємо документ користувача з Firestore
+            const userDocument = await getDoc(userDocumentReference); // Викликаємо getDoc
 
-            if (userDoc.exists()) {
-                setAvatarUrl(userDoc.data().avatarUrl); // Встановлюємо URL аватарки з Firestore
+            if (userDocument.exists()) {
+                setAvatarUrl(userDocument.data().avatarUrl); // Встановлюємо URL аватарки з Firestore
             }
         };
 

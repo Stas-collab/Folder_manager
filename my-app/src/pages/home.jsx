@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import styles from '../App.css'; // Використання CSS модуля
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+
+import styles from '../App.css'; // Використання CSS модуля
+import { auth } from '../firebase';
 
 const Home = ({ user }) => {
     const [email, setEmail] = useState('');

@@ -1,17 +1,14 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Private from './pages/private';
-import Home from './pages/home';
-import Settings from './pages/settings';
-
 import { onAuthStateChanged } from 'firebase/auth';
-import { useEffect, useState } from 'react';
-import { auth } from './firebase';
-
-import ProtectedRout from './components/protectedRout';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Route,Routes } from 'react-router-dom';
 
 // import resizeHook from '@hooks/resize';
 import styles from './App.css';
+import ProtectedRout from './components/protectedRout';
+import { auth } from './firebase';
+import Home from './pages/home';
+import Private from './pages/private';
+import Settings from './pages/settings';
 // import * as styles from './App.css';
 
 const App = () => {
