@@ -1,10 +1,10 @@
 import { signOut } from 'firebase/auth';
-import { doc, getDoc,setDoc } from 'firebase/firestore';
-import { getDownloadURL,ref, uploadBytes } from 'firebase/storage';
-import React, { useEffect,useRef, useState } from 'react';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { auth, db as database,storage } from '../firebase';
+import { auth, db as database, storage } from '../firebase';
 import DefaultImage from '../image/default.jpg';
 import EditIcon from '../image/edit.svg';
 import styles from './App.module.css';
@@ -61,7 +61,7 @@ const Settings = () => {
                     <h1 className={styles.logoName}>Folders manager</h1>
                     <div className={styles.imgProfil}>
                         <nav>
-                            <img src={avatarUrl} className={styles.profilImg} alt="" />
+                            <img src={avatarUrl} alt="" className={styles.profilImg} />
                         </nav>
                         <p className={styles.userName}>Frog</p>
                         <div className={`${styles.icon} ${styles.dashboard}`}></div>
@@ -69,32 +69,24 @@ const Settings = () => {
                             <Link to={'/private'} className={styles.links}>
                                 <span className="material-symbols-outlined">home</span>
                             </Link>
-                            <Link to={'/private'} className={styles.links}>
+                            <Link to={'/private'} className={`${styles.links} ${styles.home}`}>
                                 {' '}
                                 Home
                             </Link>
                         </div>
                         <div className={`${styles.icon} ${styles.special}`}>
-                            <div className={styles.icon}>
-                                <button className={`${styles.btn} ${styles.folder}`}>
-                                    <p>Folders</p>
-                                </button>
-                            </div>
-                            <button className={`${styles.btn} ${styles.arrow}`}>
-                                <div className={styles.arrow}></div>
-                            </button>
+                            <span class="material-symbols-outlined">groups</span>
+                            <Link to={'/about'} className={styles.links}>
+                                About us
+                            </Link>
                         </div>
-                        <ul className={styles.folders}>
-                            <li>Marketing</li>
-                            <li>Design</li>
-                            <li>WorkPlace</li>
-                        </ul>
+
                         <div className={styles.icon}>
                             <Link to={'/settings'} className={styles.links}>
                                 <span className="material-symbols-outlined">settings</span>
                             </Link>
                             <Link to={'/settings'} className={styles.links}>
-                                Setting
+                                Settings
                             </Link>
                         </div>
                     </div>

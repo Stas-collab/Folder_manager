@@ -1,9 +1,9 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Route,Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // import resizeHook from '@hooks/resize';
-import styles from './App.css';
+import About from './pages/about';
 import ProtectedRout from './components/protectedRout';
 import { auth } from './firebase';
 import Home from './pages/home';
@@ -35,7 +35,7 @@ const App = () => {
             ) : (
                 <Routes>
                     <Route index path="/" element={<Home user={user} />} />
-                    
+
                     <Route
                         path="/private"
                         element={
@@ -45,6 +45,7 @@ const App = () => {
                         }
                     />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/about" element={<About />} />
                 </Routes>
             )}
         </BrowserRouter>
