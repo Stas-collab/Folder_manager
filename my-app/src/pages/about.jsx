@@ -2,6 +2,7 @@ import { signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { auth, db as database, storage } from '../firebase';
 import DefaultImage from '../image/default.jpg';
@@ -9,6 +10,7 @@ import styles from './App.module.css';
 
 const About = () => {
     const [avatarUrl, setAvatarUrl] = useState(DefaultImage); // Стан для URL аватарки
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Функція для завантаження аватарки
@@ -26,7 +28,10 @@ const About = () => {
 
     const handleSignOut = () => {
         signOut(auth)
-            .then(() => console.log('SignOut'))
+            .then(() => {
+                console.log('SignOut');
+                navigate('/');
+            })
             .catch((error) => console.log(error));
     };
     return (

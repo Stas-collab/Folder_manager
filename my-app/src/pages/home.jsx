@@ -2,7 +2,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import styles from '../App.css'; // Використання CSS модуля
+import styles from './home.css'; // Використання CSS модуля
 import { auth } from '../firebase';
 
 const Home = ({ user }) => {

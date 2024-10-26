@@ -1,5 +1,5 @@
 import { signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,30 @@ import styles from './App.module.css';
 
 const Private = () => {
     const [avatarUrl, setAvatarUrl] = useState(DefaultImage); // Стан для URL аватарки
+    const [isHidden, setIsHidden] = useState(true);
+    const [folderName, setFolderName] = useState('');
+    const [folderColor, setFolderColor] = useState('#ffffff');
+    const [folders, setFolders] = useState([]);
+
+    const toggleWindow = () => {
+        setIsHidden(!isHidden);
+    };
+
+    const handleCreateFolder = async (e) => {
+        e.preventDefault();
+        const newFolder = { name: folderName, color: folderColor, userId: auth.currentUser.uid };
+        try {
+            const folderRef = await addDoc(collection(database, 'folders'), newFolder);
+            setFolders([...folders, { ...newFolder, id: folderRef.id }]);
+
+            setFolderName('');
+            setFolderColor('#ffffff');
+
+            toggleWindow();
+        } catch (error) {
+            console.log('Помилка при створенні папки:', error);
+        }
+    };
 
     useEffect(() => {
         // Функція для завантаження аватарки
@@ -22,6 +46,27 @@ const Private = () => {
         };
 
         fetchAvatarUrl(); // Викликаємо функцію
+    }, []);
+
+    useEffect(() => {
+        const fetchUserFolders = async () => {
+            if (!auth.currentUser) return;
+
+            const q = query(collection(database, 'folders'), where('userId', '==', auth.currentUser.uid));
+
+            try {
+                const querySnapshot = await getDocs(q);
+                const userFolders = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setFolders(userFolders);
+            } catch (error) {
+                console.log('Помилка при завантаженні папок:', error);
+            }
+        };
+
+        fetchUserFolders();
     }, []);
 
     const handleSignOut = () => {
@@ -91,9 +136,22 @@ const Private = () => {
                     <div className={styles.manageFolders}>
                         <h1 className={styles.manageFoldersText}>Manage your folders</h1>
                         <div className={styles.userFolders}>
-                            <div className={styles.newFolder}>
-                                <button className={styles.crossButton}>&#x2715;</button>
+                            <div className={styles.newFolder} onClick={toggleWindow}>
+                                <button className={styles.crossButton} onClick={toggleWindow}>
+                                    &#x2715;
+                                </button>
                             </div>
+                            {folders.map((folder) => (
+                                <div
+                                    key={folder.id}
+                                    className={styles.mainDecorationFolders}
+                                    style={{
+                                        backgroundColor: folder.color,
+                                    }}
+                                >
+                                    <p className={styles.crtFOlderName}>{folder.name}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -103,20 +161,28 @@ const Private = () => {
                             <br /> quick access to documents
                         </p>
                     </div>
-                    <div className={styles.createBtnWindow} hidden>
-                        <h1 className={styles.headText}>Створення папки</h1>
-                        <div className={styles.createBtnForm}>
+                    <div className={styles.createBtnWindow} hidden={isHidden}>
+                        <button className={styles.btnFolderClose} onClick={toggleWindow}>
+                            &times;
+                        </button>
+                        <h1 className={styles.headText}>Make your folder</h1>
+                        <form onSubmit={handleCreateFolder} className={styles.createBtnForm}>
                             <input
                                 type="text"
-                                name=""
-                                id=""
                                 className={styles.inputNameFolder}
                                 placeholder="Folder name"
+                                value={folderName}
+                                onChange={(e) => setFolderName(e.target.value)}
                             />
-                            <p>Виберіть колір</p>
-                            <input type="color" name="" id="" className={styles.inputColorFolder} />
-                            <input type="submit" value="Створити папку" className={styles.inputCreateFolder} />
-                        </div>
+                            <p>Choose color</p>
+                            <input
+                                type="color"
+                                className={styles.inputColorFolder}
+                                value={folderColor}
+                                onChange={(e) => setFolderColor(e.target.value)}
+                            />
+                            <input type="submit" value="Create folder" className={styles.inputCreateFolder} />
+                        </form>
                     </div>
                 </section>
             </article>
