@@ -2,17 +2,17 @@ import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-// import resizeHook from '@hooks/resize';
-import About from './pages/about';
 import ProtectedRout from './components/protectedRout';
 import { auth } from './firebase';
+// import resizeHook from '@hooks/resize';
+import About from './pages/about';
 import Home from './pages/home';
 import Private from './pages/private';
 import Settings from './pages/settings';
 // import * as styles from './App.css';
 
 const App = () => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState();
     const [isFetching, setIsFetching] = useState(true);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -22,7 +22,7 @@ const App = () => {
                 return;
             }
 
-            setUser(null);
+            setUser(undefined);
             setIsFetching(false);
         });
         return () => unsubscribe();

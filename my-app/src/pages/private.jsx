@@ -1,9 +1,9 @@
 import { signOut } from 'firebase/auth';
-import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { auth, db as database, storage } from '../firebase';
+import { auth, db as database } from '../firebase';
 import DefaultImage from '../image/default.jpg';
 import styles from './App.module.css';
 
@@ -18,12 +18,12 @@ const Private = () => {
         setIsHidden(!isHidden);
     };
 
-    const handleCreateFolder = async (e) => {
-        e.preventDefault();
+    const handleCreateFolder = async (event) => {
+        event.preventDefault();
         const newFolder = { name: folderName, color: folderColor, userId: auth.currentUser.uid };
         try {
-            const folderRef = await addDoc(collection(database, 'folders'), newFolder);
-            setFolders([...folders, { ...newFolder, id: folderRef.id }]);
+            const folderReference = await addDoc(collection(database, 'folders'), newFolder);
+            setFolders([...folders, { ...newFolder, id: folderReference.id }]);
 
             setFolderName('');
             setFolderColor('#ffffff');
@@ -35,10 +35,10 @@ const Private = () => {
     };
     const handleDeleteFolder = async (folderId) => {
         try {
-            const folderRef = doc(database, 'folders', folderId);
-            await deleteDoc(folderRef);
+            const folderReference = doc(database, 'folders', folderId);
+            await deleteDoc(folderReference);
 
-            setFolders((prevFolders) => prevFolders.filter((folder) => folder.id !== folderId));
+            setFolders((previousFolders) => previousFolders.filter((folder) => folder.id !== folderId));
         } catch (error) {
             console.log('Помилка при видаленні папки:', error);
             alert('Не вдалося видалити папку. Спробуйте ще раз.');
@@ -67,9 +67,9 @@ const Private = () => {
 
             try {
                 const querySnapshot = await getDocs(q);
-                const userFolders = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
+                const userFolders = querySnapshot.docs.map((document_) => ({
+                    id: document_.id,
+                    ...document_.data(),
                 }));
                 setFolders(userFolders);
             } catch (error) {
@@ -106,7 +106,7 @@ const Private = () => {
                             </Link>
                         </div>
                         <div className={`${styles.icon} ${styles.special}`}>
-                            <span class="material-symbols-outlined">groups</span>
+                            <span className="material-symbols-outlined">groups</span>
                             <Link to={'/about'} className={styles.links}>
                                 About us
                             </Link>
@@ -191,14 +191,14 @@ const Private = () => {
                                 className={styles.inputNameFolder}
                                 placeholder="Folder name"
                                 value={folderName}
-                                onChange={(e) => setFolderName(e.target.value)}
+                                onChange={(event) => setFolderName(event.target.value)}
                             />
                             <p>Choose color</p>
                             <input
                                 type="color"
                                 className={styles.inputColorFolder}
                                 value={folderColor}
-                                onChange={(e) => setFolderColor(e.target.value)}
+                                onChange={(event) => setFolderColor(event.target.value)}
                             />
                             <input type="submit" value="Create folder" className={styles.inputCreateFolder} />
                         </form>

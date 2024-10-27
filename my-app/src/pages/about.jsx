@@ -1,10 +1,9 @@
 import { signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { auth, db as database, storage } from '../firebase';
+import { auth, db as database } from '../firebase';
 import DefaultImage from '../image/default.jpg';
 import styles from './App.module.css';
 
@@ -55,7 +54,7 @@ const About = () => {
                             </Link>
                         </div>
                         <div className={`${styles.icon} ${styles.special}`}>
-                            <span class="material-symbols-outlined">groups</span>
+                            <span className="material-symbols-outlined">groups</span>
                             <Link to={'/about'} className={styles.links}>
                                 About us
                             </Link>

@@ -75,7 +75,7 @@ const Settings = () => {
                             </Link>
                         </div>
                         <div className={`${styles.icon} ${styles.special}`}>
-                            <span class="material-symbols-outlined">groups</span>
+                            <span className="material-symbols-outlined">groups</span>
                             <Link to={'/about'} className={styles.links}>
                                 About us
                             </Link>
