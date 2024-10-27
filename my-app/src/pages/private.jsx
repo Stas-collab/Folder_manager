@@ -1,5 +1,5 @@
 import { signOut } from 'firebase/auth';
-import { doc, getDoc, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, query, where, getDocs, deleteDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -31,6 +31,17 @@ const Private = () => {
             toggleWindow();
         } catch (error) {
             console.log('Помилка при створенні папки:', error);
+        }
+    };
+    const handleDeleteFolder = async (folderId) => {
+        try {
+            const folderRef = doc(database, 'folders', folderId);
+            await deleteDoc(folderRef);
+
+            setFolders((prevFolders) => prevFolders.filter((folder) => folder.id !== folderId));
+        } catch (error) {
+            console.log('Помилка при видаленні папки:', error);
+            alert('Не вдалося видалити папку. Спробуйте ще раз.');
         }
     };
 
@@ -149,7 +160,15 @@ const Private = () => {
                                         backgroundColor: folder.color,
                                     }}
                                 >
-                                    <p className={styles.crtFOlderName}>{folder.name}</p>
+                                    <div className={styles.foldersInf}>
+                                        <p className={styles.crtFOlderName}>{folder.name}</p>
+                                        <button
+                                            className={styles.foldersInfBtn}
+                                            onClick={() => handleDeleteFolder(folder.id)}
+                                        >
+                                            &times;
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
