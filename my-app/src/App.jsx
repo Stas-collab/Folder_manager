@@ -1,9 +1,9 @@
-import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProtectedRout from './components/protectedRout';
-import { auth } from './firebase';
+
+import useAuth from './hooks/useAuth';
 // import resizeHook from '@hooks/resize';
 import About from './pages/about';
 import Home from './pages/home';
@@ -12,42 +12,26 @@ import Settings from './pages/settings';
 // import * as styles from './App.css';
 
 const App = () => {
-    const [user, setUser] = useState();
-    const [isFetching, setIsFetching] = useState(true);
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUser(user);
-                setIsFetching(false);
-                return;
-            }
-
-            setUser(undefined);
-            setIsFetching(false);
-        });
-        return () => unsubscribe();
-    }, []);
-
+    const { user, isFetching } = useAuth();
+    if (isFetching) {
+        return <h1>Loading...</h1>;
+    }
     return (
         <BrowserRouter>
-            {isFetching ? (
-                <h1>Loading...</h1>
-            ) : (
-                <Routes>
-                    <Route index path="/" element={<Home user={user} />} />
+            <Routes>
+                <Route index path="/" element={<Home user={user} />} />
 
-                    <Route
-                        path="/private"
-                        element={
-                            <ProtectedRout user={user}>
-                                <Private />
-                            </ProtectedRout>
-                        }
-                    />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/about" element={<About />} />
-                </Routes>
-            )}
+                <Route
+                    path="/private"
+                    element={
+                        <ProtectedRout user={user}>
+                            <Private />
+                        </ProtectedRout>
+                    }
+                />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/about" element={<About />} />
+            </Routes>
         </BrowserRouter>
     );
 };
