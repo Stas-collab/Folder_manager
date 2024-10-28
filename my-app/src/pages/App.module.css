@@ -502,12 +502,15 @@ h2 + ul {
     position: absolute;
     right: 10px;
     top: 0px;
+    color: #fff;
 }
 
 .folderIcons {
     display: flex;
+    position: absolute;
+    top: 287px;
 
-    gap: 90px;
+    gap: 94px;
     color: #fff;
 }
 

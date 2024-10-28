@@ -1,9 +1,9 @@
 import { signOut } from 'firebase/auth';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-
-import { auth, db as database } from '../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db as database, storage } from '../firebase';
 import DefaultImage from '../image/default.jpg';
 import styles from './App.module.css';
 
@@ -14,6 +14,7 @@ const Private = () => {
     const [folderColor, setFolderColor] = useState('#ffffff');
     const [folders, setFolders] = useState([]);
 
+    const fileInputRefs = useRef({});
     const toggleWindow = () => {
         setIsHidden(!isHidden);
     };
@@ -44,6 +45,32 @@ const Private = () => {
             alert('Не вдалося видалити папку. Спробуйте ще раз.');
         }
     };
+    const handleFileUpload = async (folderId, event) => {
+        const files = event.target.files;
+        if (files.length === 0) return;
+
+        try {
+            const uploadPromises = Array.from(files).map(async (file) => {
+                const fileRef = ref(storage, `folders/${folderId}/${file.name}`);
+                await uploadBytes(fileRef, file);
+                const fileUrl = await getDownloadURL(fileRef);
+
+                await addDoc(collection(database, `folders/${folderId}/files`), { name: file.name, url: fileUrl });
+            });
+
+            await Promise.all(uploadPromises);
+            alert('Усі файли завантажено успішно');
+        } catch (error) {
+            console.error('Помилка при завантаженні файлів:', error);
+            alert('Помилка при завантаженні файлів. Спробуйте ще раз.');
+        }
+    };
+
+    const handleSpanClick = (folderId) => {
+        if (fileInputRefs.current[folderId]) {
+            fileInputRefs.current[folderId].click();
+        }
+    };
 
     useEffect(() => {
         // Функція для завантаження аватарки
@@ -67,10 +94,14 @@ const Private = () => {
 
             try {
                 const querySnapshot = await getDocs(q);
-                const userFolders = querySnapshot.docs.map((document_) => ({
-                    id: document_.id,
-                    ...document_.data(),
-                }));
+                const userFolders = await Promise.all(
+                    querySnapshot.docs.map(async (document_) => {
+                        const folderId = document_.id;
+                        const filesSnapshot = await getDocs(collection(database, `folders/${folderId}/files`));
+                        const files = filesSnapshot.docs.map((fileDoc) => ({ id: fileDoc.id, ...fileDoc.data() }));
+                        return { id: folderId, ...document_.data(), files };
+                    }),
+                );
                 setFolders(userFolders);
             } catch (error) {
                 console.log('Помилка при завантаженні папок:', error);
@@ -171,11 +202,33 @@ const Private = () => {
                                     </div>
                                     <div className={styles.folderIcons}>
                                         <button className={styles.fileFilters}>
-                                            <span className="material-symbols-outlined">download</span>
+                                            <span
+                                                className="material-symbols-outlined"
+                                                onClick={() => handleSpanClick(folder.id)}
+                                            >
+                                                attach_file
+                                            </span>
+                                            <input
+                                                type="file"
+                                                className={styles.fileInput}
+                                                onChange={(event) => handleFileUpload(folder.id, event)}
+                                                ref={(ref) => (fileInputRefs.current[folder.id] = ref)}
+                                                hidden
+                                                multiple
+                                            />
                                         </button>
-                                        <button className={styles.fileFilters}>
-                                            <span className="material-symbols-outlined">attach_file</span>
-                                        </button>
+                                    </div>
+                                    <div className={styles.fileList}>
+                                        <ul className={styles.fileList}>
+                                            {folder.files &&
+                                                folder.files.map((file) => (
+                                                    <li key={file.name}>
+                                                        <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                                            {file.name}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                        </ul>
                                     </div>
                                 </div>
                             ))}
