@@ -169,6 +169,14 @@ const Private = () => {
                                             &times;
                                         </button>
                                     </div>
+                                    <div className={styles.folderIcons}>
+                                        <button className={styles.fileFilters}>
+                                            <span className="material-symbols-outlined">download</span>
+                                        </button>
+                                        <button className={styles.fileFilters}>
+                                            <span className="material-symbols-outlined">attach_file</span>
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
