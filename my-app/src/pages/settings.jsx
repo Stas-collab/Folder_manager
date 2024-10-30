@@ -125,6 +125,7 @@ const Settings = () => {
                                     ref={fileUploadeReference}
                                     onChange={uploadImageDisplay}
                                     id="file"
+                                    data-testid="file-input"
                                     hidden
                                 />
                             </form>
