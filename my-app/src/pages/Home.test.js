@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { AuthProvider } from '../components/AuthProvider';
 import { BrowserRouter } from 'react-router-dom';
 import Home from './home';
+import About from './about';
 import { signOut } from 'firebase/auth';
 import DefaultImage from '../image/default.jpg';
 import { MemoryRouter } from 'react-router-dom';
@@ -16,6 +17,7 @@ import { getDoc, setDoc } from 'firebase/firestore';
 jest.mock('firebase/auth', () => {
     return {
         getAuth: jest.fn(() => ({})), // Мок для getAuth
+        signOut: jest.fn(() => Promise.resolve()),
         createUserWithEmailAndPassword: jest.fn(),
         signInWithEmailAndPassword: jest.fn(),
     };
@@ -199,5 +201,47 @@ describe('Settings component', () => {
                 { merge: true },
             );
         });
+    });
+});
+
+describe('About Component', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test('renders About component with user avatar', async () => {
+        render(
+            <MemoryRouter>
+                <About />
+            </MemoryRouter>,
+        );
+
+        const aboutHeadings = screen.getAllByText(/About us/i);
+        expect(aboutHeadings).toHaveLength(2);
+        expect(aboutHeadings[0]).toBeInTheDocument();
+    });
+
+    test('handles sign out', async () => {
+        render(
+            <MemoryRouter>
+                <About />
+            </MemoryRouter>,
+        );
+
+        const signOutButton = screen.getByRole('button', { name: /logout/i });
+        fireEvent.click(signOutButton);
+
+        expect(signOut).toHaveBeenCalledWith(auth);
+    });
+
+    test('does not render user avatar if not available', async () => {
+        render(
+            <MemoryRouter>
+                <About />
+            </MemoryRouter>,
+        );
+
+        const avatarImg = await screen.findByAltText('');
+        expect(avatarImg).toHaveAttribute('src', DefaultImage);
     });
 });
