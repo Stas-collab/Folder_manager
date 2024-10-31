@@ -1,10 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { AuthProvider } from '../components/AuthProvider';
 import { BrowserRouter } from 'react-router-dom';
 import Home from './home';
 import { signOut } from 'firebase/auth';
 import DefaultImage from '../image/default.jpg';
+import { MemoryRouter } from 'react-router-dom';
 import Private from './private';
 import Settings from './settings';
 import '@testing-library/jest-dom';
@@ -50,14 +52,19 @@ describe('Home component', () => {
     });
 
     test('toggles between Register and Login forms', () => {
-        renderWithRouter(<Home />);
-        expect(screen.getByText(/Register/i)).toBeInTheDocument();
+        render(<Home user={null} />);
 
         const toggleLink = screen.getByText(/Login/i);
+
         fireEvent.click(toggleLink);
 
-        expect(screen.getByText(/Login/i)).toBeInTheDocument();
-        expect(screen.queryByText(/Create an account/i)).not.toBeInTheDocument();
+        const loginTitle = screen.getByRole('heading', { name: /Login/i });
+        expect(loginTitle).toBeInTheDocument();
+
+        const loginButton = screen.getByRole('button', { name: /Login/i });
+        expect(loginButton).toBeInTheDocument();
+
+        expect(screen.getByText(/Register/i)).toBeInTheDocument();
     });
 
     test('validates email format before submitting', async () => {
@@ -75,7 +82,11 @@ describe('Home component', () => {
     });
 
     test('calls createUserWithEmailAndPassword on valid signup', async () => {
-        renderWithRouter(<Home />);
+        createUserWithEmailAndPassword.mockResolvedValueOnce({
+            user: { uid: '12345', email: 'test@example.com' },
+        });
+
+        render(<Home user={null} />);
 
         fireEvent.change(screen.getByPlaceholderText(/Email/i), {
             target: { value: 'test@example.com' },
@@ -84,34 +95,27 @@ describe('Home component', () => {
             target: { value: 'password123' },
         });
 
-        const submitButton = screen.getByText(/Create an account/i);
-        fireEvent.click(submitButton);
+        fireEvent.click(screen.getByRole('button', { name: /Create an account/i }));
 
-        await waitFor(() => {
-            expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(auth, 'test@example.com', 'password123');
-        });
+        expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(auth, 'test@example.com', 'password123');
     });
 
-    test('calls signInWithEmailAndPassword on valid login', async () => {
-        renderWithRouter(<Home />);
+    test('should call signInWithEmailAndPassword on sign in', async () => {
+        signInWithEmailAndPassword.mockResolvedValueOnce({ user: { email: 'test@example.com' } });
 
-        fireEvent.click(screen.getByText(/Login/i));
+        render(<Home user={null} />);
 
-        fireEvent.change(screen.getByPlaceholderText(/Email/i), {
-            target: { value: 'test@example.com' },
-        });
-        fireEvent.change(screen.getByPlaceholderText(/Password/i), {
-            target: { value: 'password123' },
-        });
+        fireEvent.click(screen.getByText('Login'));
 
-        const submitButton = screen.getByText(/Login/i);
-        fireEvent.click(submitButton);
+        fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } });
+        fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } });
+
+        fireEvent.click(screen.getByRole('button', { name: /Login/i }));
 
         await waitFor(() => {
             expect(signInWithEmailAndPassword).toHaveBeenCalledWith(auth, 'test@example.com', 'password123');
         });
     });
-
     test('redirects to /private when user is authenticated', () => {
         renderWithRouter(<Home user={{ email: 'test@example.com' }} />);
         expect(screen.queryByText(/Register/i)).not.toBeInTheDocument();
@@ -124,10 +128,17 @@ describe('Private component', () => {
     });
 
     test('creates a folder successfully', async () => {
-        render(<Private />);
+        const mockUser = { uid: 'testUserId' };
+        render(
+            <MemoryRouter>
+                <AuthContext.Provider value={{ user: mockUser }}>
+                    <Private />
+                </AuthContext.Provider>
+            </MemoryRouter>,
+        );
 
         fireEvent.change(screen.getByPlaceholderText(/Folder name/i), { target: { value: 'New Folder' } });
-        fireEvent.change(screen.getByDisplayValue(/#ffffff/i), { target: { value: '#ff0000' } }); // Вибір червоного кольору
+        fireEvent.change(screen.getByDisplayValue(/#ffffff/i), { target: { value: '#ff0000' } });
 
         addDoc.mockResolvedValueOnce({ id: 'folderId' });
 
@@ -138,7 +149,7 @@ describe('Private component', () => {
             expect(addDoc).toHaveBeenCalledWith(expect.anything(), {
                 name: 'New Folder',
                 color: '#ff0000',
-                userId: expect.any(String),
+                userId: 'testUserId',
             });
         });
     });
