@@ -42,7 +42,7 @@ const About = () => {
                         <nav>
                             <img src={avatarUrl} alt="" className={styles.profilImg} />
                         </nav>
-                        <p className={styles.userName}>Frog</p>
+                        <p className={styles.userName}></p>
                         <div className={`${styles.icon} ${styles.dashboard}`}></div>
                         <div className={styles.icon}>
                             <Link to={'/private'} className={styles.links}>
