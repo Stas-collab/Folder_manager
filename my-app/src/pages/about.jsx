@@ -78,12 +78,6 @@ const About = () => {
                         </div>
                         <div className={styles.rightPanel}>
                             <div className={styles.userBtn}>
-                                <button className={styles.ring}>
-                                    <span className="material-symbols-outlined">notifications</span>
-                                </button>
-                                <div className={styles.ringWindow} hidden>
-                                    <button className={styles.closeWindow}>&times;</button>
-                                </div>
                                 <button onClick={handleSignOut} className={styles.logout}>
                                     <span className="material-symbols-outlined">logout</span>
                                 </button>
