@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { AuthProvider } from '../components/AuthProvider';
+import { AuthContext } from '../components/AuthProvider';
 import { BrowserRouter } from 'react-router-dom';
 import Home from './home';
 import About from './about';
@@ -11,7 +11,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Private from './private';
 import Settings from './settings';
 import '@testing-library/jest-dom';
-import { auth } from '../firebase';
+import { auth, db as database, storage } from '../firebase';
 import { getDoc, setDoc } from 'firebase/firestore';
 // Мок функцій Firebase
 jest.mock('firebase/auth', () => {
