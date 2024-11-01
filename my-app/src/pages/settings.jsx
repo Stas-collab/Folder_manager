@@ -99,9 +99,6 @@ const Settings = () => {
                         </div>
                         <div className={styles.rightPanel}>
                             <div className={styles.userBtn}>
-                                <button className={styles.ring}>
-                                    <span className="material-symbols-outlined">notifications</span>
-                                </button>
                                 <button onClick={handleSignOut} className={styles.logout}>
                                     <span className="material-symbols-outlined">logout</span>
                                 </button>
