@@ -40,7 +40,7 @@ const About = () => {
                     <h1 className={styles.logoName}>Folders manager</h1>
                     <div className={styles.imgProfil}>
                         <nav>
-                            <img src={avatarUrl} alt="" className={styles.profilImg} />
+                            <img src={avatarUrl || DefaultImage} alt="user avatar" className={styles.profilImg} />
                         </nav>
                         <p className={styles.userName}>Frog</p>
                         <div className={`${styles.icon} ${styles.dashboard}`}></div>

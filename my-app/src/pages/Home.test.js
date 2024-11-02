@@ -11,6 +11,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Private from './private';
 import Settings from './settings';
 import '@testing-library/jest-dom';
+import { getDownloadURL } from 'firebase/storage';
 import { auth, db as database, storage } from '../firebase';
 import { getDoc, setDoc } from 'firebase/firestore';
 // Мок функцій Firebase
@@ -22,6 +23,10 @@ jest.mock('firebase/auth', () => {
         signInWithEmailAndPassword: jest.fn(),
     };
 });
+jest.mock('firebase/storage', () => ({
+    getStorage: jest.fn(),
+    getDownloadURL: jest.fn(),
+}));
 
 jest.mock('firebase/firestore', () => {
     return {
@@ -181,17 +186,22 @@ describe('Settings component', () => {
     });
 
     test('handles image upload', async () => {
-        const file = new File(['test'], 'test.png', { type: 'image/png' });
+        const { getByTestId } = render(
+            <MemoryRouter>
+                <Settings />
+            </MemoryRouter>,
+        );
 
-        renderWithRouter(<Settings />);
+        const fileInput = getByTestId('file-input');
+        const file = new File(['dummy content'], 'avatar.jpg', { type: 'image/jpeg' });
 
-        const input = screen.getByTestId('file-input');
+        // Mock the returned URL from getDownloadURL
+        getDownloadURL.mockResolvedValue('http://example.com/avatar.jpg');
 
-        Object.defineProperty(input, 'files', {
-            value: [file],
-        });
-        fireEvent.change(input);
+        // Simulate file change
+        fireEvent.change(fileInput, { target: { files: [file] } });
 
+        // Expect setDoc to be called with the correct parameters
         await waitFor(() => {
             expect(setDoc).toHaveBeenCalledWith(
                 expect.anything(),
@@ -235,13 +245,17 @@ describe('About Component', () => {
     });
 
     test('does not render user avatar if not available', async () => {
+        // Мок для `getDoc` для повернення документа без `avatarUrl`
+        const mockUserDoc = { exists: () => true, data: () => ({}) };
+        getDoc.mockResolvedValue(mockUserDoc);
+
         render(
             <MemoryRouter>
                 <About />
             </MemoryRouter>,
         );
 
-        const avatarImg = await screen.findByAltText('');
+        const avatarImg = await screen.findByAltText('user avatar');
         expect(avatarImg).toHaveAttribute('src', DefaultImage);
     });
 });
