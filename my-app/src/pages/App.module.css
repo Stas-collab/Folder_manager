@@ -104,10 +104,10 @@ h1 {
 }
 
 .profilImg {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     border-radius: 100%;
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
 nav {
@@ -401,6 +401,7 @@ li:last-child {
 
 .userEditIcon {
     position: relative;
+    margin-left: 470px;
 }
 
 .editIcon {
