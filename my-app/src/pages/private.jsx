@@ -173,7 +173,11 @@ const Private = () => {
                         <h1 className={styles.manageFoldersText}>Manage your folders</h1>
                         <div className={styles.userFolders}>
                             <div className={styles.newFolder} onClick={toggleWindow}>
-                                <button className={styles.crossButton} onClick={toggleWindow}>
+                                <button
+                                    data-testid="cypressCrtBtn"
+                                    className={styles.crossButton}
+                                    onClick={toggleWindow}
+                                >
                                     &#x2715;
                                 </button>
                             </div>

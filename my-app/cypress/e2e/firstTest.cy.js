@@ -6,7 +6,7 @@ describe('template spec', () => {
     });
 });
 
-describe('Home Component E2E Tests', () => {
+describe(' E2E Tests', () => {
     beforeEach(() => {
         cy.visit(' http://localhost:9000');
     });
@@ -27,13 +27,28 @@ describe('Home Component E2E Tests', () => {
     });
 
     it('should allow user to register', () => {
-        cy.get('input[type="email"]').type('testuser@ex345amplwd.com');
+        cy.get('input[type="email"]').type('testuser@e2w029amplwd.com');
         cy.get('input[type="password"]').type('password12');
         cy.get('button').contains('Create an account').click();
 
         cy.url().should('include', '/private');
     });
-    it('sing out', () => {
-        cy.get('button').contains('logout').click;
+    it('Create folder', () => {
+        cy.get('[data-testid="cypressCrtBtn"]').click();
+        cy.get('input[type="text"]').type('Привіт');
+        cy.get('input[type="color"]').invoke('val', '#ff0000').trigger('input').trigger('change');
+        cy.get("input[type='submit']").click();
+    });
+    it('Click on Settings page', () => {
+        cy.get('a').contains('Settings').click();
+    });
+    it('Click on About page', () => {
+        cy.get('a').contains('About').click();
+    });
+    it('Click on About page', () => {
+        cy.get('a').contains('Home').click();
+    });
+    it('Sing out', () => {
+        cy.get('button').contains('logout').click();
     });
 });
