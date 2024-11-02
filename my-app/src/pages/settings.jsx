@@ -63,7 +63,7 @@ const Settings = () => {
                         <nav>
                             <img src={avatarUrl} alt="" className={styles.profilImg} />
                         </nav>
-                        <p className={styles.userName}>Frog</p>
+                        <p className={styles.userName}></p>
                         <div className={`${styles.icon} ${styles.dashboard}`}></div>
                         <div className={styles.icon}>
                             <Link to={'/private'} className={styles.links}>
@@ -106,10 +106,6 @@ const Settings = () => {
                         </div>
                     </div>
                     <div className={styles.settingsPage}>
-                        <div className={styles.inputsSetting}>
-                            <input type="text" className={styles.userNameInput} placeholder="Name" />
-                            <input type="submit" value="Save" className={styles.userNameSumbit} />
-                        </div>
                         <div className={styles.userEditIcon}>
                             <img src={avatarUrl} alt="Avatar" className={styles.avatar} />
                             <form id="form" encType="multipart/form-data">
